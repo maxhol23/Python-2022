@@ -86,12 +86,15 @@ library.items.add(art_piece_3)
 ############################
 game_start = True
 
+
+
+
 ############################
 #BINDS (eg"@when("look"))
 ############################
 if game_start == True:
 	game_start == True
-	print("You wakeup with a letter in your pocket. This is what it states.There are millions somewhere in the house but there are traps lying around that may kill you,in order to find it, you must navigate to the treasure room to gather these millions.\nAccept this invitation if you dare.")
+	print("You wakeup with a letter in your pocket. It states that somewhere amongst the house is millions of dollars. A piece of an art piece lies in the corner, you will need four of these too get the code to ultimately unlock the room to get all of the moolah.")
 
 
 @when("look")
@@ -135,6 +138,18 @@ def look_at (item):
 		print(t.description)
 	else:
 		print(f"You aren't carrying a {item}")
+
+############################
+#BINDS FOR ITEMS
+############################
+@when("pick up art piece")
+def pick_up_art_piece():
+	print("You pick up the art piece")
+	
+
+
+
+
 ############################
 #MAIN FUNCTION
 ############################
