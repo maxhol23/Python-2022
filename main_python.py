@@ -50,8 +50,8 @@ glass_table = Item("glass table","table","glass")
 glass_table.description = "You look at the glass table and it looks like you can put some art on it."
 broomstick = Item("broom stick","broom","bristleless broomstick","bristleless broom")
 broomstick.description = "You look at the broomstick"
-mayonaise = Item("mayonaise","mayonaise tub","tub of mayonaise","mayo","mayo tub","tub of mayo")
-mayonaise.description = "You look at the tub of mayonaise and you notice a small piece of paper hanging from under the tub"
+mayonaise_tub = Item("mayonaise","mayonaise tub","tub of mayonaise","mayo","mayo tub","tub of mayo")
+mayonaise_tub.description = "You look at the tub of mayonaise and you notice a small piece of paper hanging from under the tub"
 book = Item("book","book on the ground")
 book.description = "You look at the book on the ground and notice that there is shiny metallic objet lying within it"
 sledge_hammer_key = Item("key","key in book","key in the book")
@@ -70,7 +70,7 @@ Room.items = Bag()
 ############################
 
 
-kitchen.items.add(mayonaise)
+kitchen.items.add(mayonaise_tub)
 living_room.items.add(art_piece_1)
 bedroom_1.items.add(broomstick)
 bedroom_1.items.add(art_piece_2)
@@ -85,6 +85,7 @@ library.items.add(art_piece_3)
 #DEFINE ANY VARIABLES
 ############################
 game_start = True
+current_room = living_room
 
 
 
@@ -93,35 +94,32 @@ game_start = True
 #BINDS (eg"@when("look"))
 ############################
 if game_start == True:
-	game_start == True
-	print("You wakeup with a letter in your pocket. It states that somewhere amongst the house is millions of dollars. A piece of an art piece lies in the corner, you will need four of these too get the code to ultimately unlock the room to get all of the moolah.")
-
+	print("You wakeup with a letter in your pocket. It states that somewhere amongst the house is millions of dollars. A piece of art\nlies in the corner, you will need four of these too get the code to ultimately unlock the room to get all of the moolah.")
+	game_start = False
 
 @when("look")
 def look():
 	print("You look around")
 	print(current_room)
 
+@when("east",direction = "east")
+@when("west",direction = "west")
+@when("south",direction = "south")
+@when("north",direction = "north")
 
 
+@when("DIRECTION")
 @when("go DIRECTION")
 def travel(direction):
 	global current_room
+	print(current_room.exits())
 	if direction in current_room.exits():
 		current_room = current_room.exit(direction)
 		print(f'You go {direction}.')
 		print(current_room)
-
-@when("get ITEM")
-@when("take ITEM")
-@when("pick up ITEM")
-def pickup(item):
-	if item in current_room.items:
-		t = current_room.items(item)
-		inventory.add(t)
-		print(f"You pick up the {item}")
 	else:
-		print(f"You don't see a {item}")
+		print("You cannot go that way")
+
 
 @when("inventory")
 @when("show inventory")
@@ -131,6 +129,21 @@ def player_inventory():
 	for item in inventory:
 		print(item)
 
+
+
+############################
+#BINDS FOR ITEMS
+############################
+@when("get ITEM")
+@when("take ITEM")
+def get_item(item):
+	if item in current_room.items:
+		t = current_room.items.take(item)
+		inventory.add(t)
+		print(f"You pick up the item")
+	else:
+		print(f"You don't see a {item}")
+
 @when("look at ITEM")
 def look_at (item):
 	if item in inventory:
@@ -139,17 +152,14 @@ def look_at (item):
 	else:
 		print(f"You aren't carrying a {item}")
 
-############################
-#BINDS FOR ITEMS
-############################
-@when("pick up art piece")
-def pick_up_art_piece():
-	print("You pick up the art piece")
-	
-
 
 
 
 ############################
 #MAIN FUNCTION
 ############################
+
+def main():
+	start()
+	#Start the main loop
+main()
