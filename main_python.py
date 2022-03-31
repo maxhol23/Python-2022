@@ -99,20 +99,23 @@ if game_start == True:
 
 @when("look")
 def look():
-	print("You look around")
+	global current_room
 	print(current_room)
-
-@when("east",direction = "east")
-@when("west",direction = "west")
-@when("south",direction = "south")
-@when("north",direction = "north")
-
+	exits_amount = int(len(current_room.exits()))
+	if exits_amount == 1:
+		#grammatically correct way of saying there is one exit
+		print(f"You can see exits to the {', '.join(current_room.exits())}")
+	elif exits_amount > 1:
+			#grammatically correct way of saying there is more than one exit
+		print(f"You can see exits to the {', '.join(current_room.exits()[:-1]) + ' and ' + current_room.exits()[-1]}")
+	else:
+		print("You can't see any exits")
+    
 
 @when("DIRECTION")
 @when("go DIRECTION")
 def travel(direction):
 	global current_room
-	print(current_room.exits())
 	if direction in current_room.exits():
 		current_room = current_room.exit(direction)
 		print(f'You go {direction}.')
