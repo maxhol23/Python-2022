@@ -52,6 +52,8 @@ broomstick = Item("broom stick","broom","bristleless broomstick","bristleless br
 broomstick.description = "You look at the broomstick"
 mayonaise_tub = Item("mayonaise","mayonaise tub","tub of mayonaise","mayo","mayo tub","tub of mayo")
 mayonaise_tub.description = "You look at the tub of mayonaise and you notice a small piece of paper hanging from under the tub"
+piece_of_paper = Item("paper","piece of paper", "note")
+piece_of_paper.description = "You take off the piece of paper and it reveals the word code, MAYO"
 book = Item("book","book on the ground")
 book.description = "You look at the book on the ground and notice that there is shiny metallic objet lying within it"
 sledge_hammer_key = Item("key","key in book","key in the book")
@@ -110,10 +112,13 @@ def look():
 		print(f"You can see exits to the {', '.join(current_room.exits()[:-1]) + ' and ' + current_room.exits()[-1]}")
 	else:
 		print("You can't see any exits")
-    
 
-@when("DIRECTION")
+@when("north",direction = "north")    
+@when("east",direction = "east")
+@when("south",direction = "south")
+@when("west",direction = "west")
 @when("go DIRECTION")
+
 def travel(direction):
 	global current_room
 	if direction in current_room.exits():
@@ -154,6 +159,15 @@ def look_at (item):
 		print(t.description)
 	else:
 		print(f"You aren't carrying a {item}")
+
+@when("use ITEM")
+def use(item):
+	if used_piece_of_paper and current_room == living_room:
+		print("You use the code and a door opens to reveal the library")
+		used_piece_of_paper = True
+		living_room.south = library
+	else:
+		print("You can't use that here")
 
 
 
